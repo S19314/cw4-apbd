@@ -123,6 +123,37 @@ namespace cw3_apbd.Controllers
         }
 
 
-        [Route("api/students/semesters")]
+        // [Route("api/students/semesters")]
+        [HttpGet("{id}/semester")]
+        public IActionResult GetStudentSemestr(int id) {
+            Console.WriteLine("AAAA");
+            String info = "";
+
+            using (var connection = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19314;Integrated Security=True "))
+            using (var command = new SqlCommand()) {
+                command.Connection = connection;
+                command.CommandText = "SELECT * FROM Enrollment " +
+                                       $" INNER JOIN( SELECT * FROM Student WHERE Student.IndexNumber = {id}) a " +
+                                       " ON a.IdEnrollment = Enrollment.IdEnrollment; ";
+                connection.Open();
+                var dataReader = command.ExecuteReader();
+                while (dataReader.Read()) { 
+                info = info +
+                    "FirstName: " +dataReader["FirstName"].ToString() + " " +
+                    "LastName: " + dataReader["LastName"].ToString() + " " +
+                    "IndexNumber: " + dataReader["IndexNumber"].ToString() + " " +
+                    "BirthDate" + " " + dataReader["BirthDate"].ToString() + " " +
+                    "IdEnrollment" + " " + dataReader["IdEnrollment"].ToString() + " " +
+                    "Semester" + " " + dataReader["Semester"].ToString() + " " +
+                    "IdStudy" + " " + dataReader["IdStudy"].ToString() + " " +
+                    "StartDate" + " " + dataReader["StartDate"].ToString() + "\n";
+                }
+            }
+
+            if(info.Equals(""))
+                return NotFound("Nie znaleziono informacje o semestrze dannego studenta");
+            
+            return Ok(info);
+        }
     }
 }
