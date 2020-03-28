@@ -60,7 +60,8 @@ namespace cw3_apbd.Controllers
             using (var command = new SqlCommand()) 
             {
                 command.Connection = connection;
-                command.CommandText = $"SELECT * FROM Student WHERE student.IndexNumber = {id};";
+                command.CommandText = $"SELECT * FROM Student WHERE student.IndexNumber = @id;";
+                command.Parameters.AddWithValue("id",id);
                 connection.Open();
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read()) {
@@ -126,7 +127,6 @@ namespace cw3_apbd.Controllers
         // [Route("api/students/semesters")]
         [HttpGet("{id}/semester")]
         public IActionResult GetStudentSemestr(int id) {
-            Console.WriteLine("AAAA");
             String info = "";
 
             using (var connection = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19314;Integrated Security=True "))
