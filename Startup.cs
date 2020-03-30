@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using cw3_apbd.DAL;
 using cw3_apbd.Controllers;
+using cw3_apbd.Services;
 namespace cw3_apbd
 {
     public class Startup
@@ -26,6 +27,7 @@ namespace cw3_apbd
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDbService, MockDbService>();
+            services.AddSingleton<ISudentsDbServices, ServerDbServices>();
             services.AddControllers();
         }
 
